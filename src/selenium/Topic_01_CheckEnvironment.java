@@ -10,7 +10,9 @@ import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
 public class Topic_01_CheckEnvironment {
+	
 	WebDriver driver;
+	
   @Test
   public void TC_01_CheckUrl() {
 	  String homePageUrl = driver.getCurrentUrl();
@@ -24,6 +26,7 @@ public class Topic_01_CheckEnvironment {
   }
   @BeforeTest
   public void beforeTest() {
+	  System.setProperty("webdriver.chrome.driver","D:\\Automation Test\\chromedriver\\chromedriver.exe");
 	  driver = new ChromeDriver();
 	  driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
 	  driver.manage().window().maximize();
