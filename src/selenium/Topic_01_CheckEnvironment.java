@@ -31,6 +31,7 @@ public class Topic_01_CheckEnvironment {
 	  driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
 	  driver.manage().window().maximize();
 	  driver.get("http://live.guru99.com/");
+	  //test
   }
 
   @AfterTest
