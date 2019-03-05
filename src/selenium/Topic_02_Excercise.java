@@ -1,5 +1,6 @@
 package selenium;
 
+import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 import org.openqa.selenium.By;
@@ -14,6 +15,18 @@ import org.testng.annotations.Test;
 public class Topic_02_Excercise {
 
 	WebDriver driver;
+	public String getSaltString() {
+        String SALTCHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+        StringBuilder salt = new StringBuilder();
+        Random rnd = new Random();
+        while (salt.length() < 10) { // length of the random string.
+            int index = (int) (rnd.nextFloat() * SALTCHARS.length());
+            salt.append(SALTCHARS.charAt(index));
+        }
+        String saltStr = salt.toString();
+        return saltStr;
+
+    }
 
 	@BeforeTest
 	public void beforeTest() {
@@ -103,6 +116,40 @@ public class Topic_02_Excercise {
 		
 		//Step 05 - Verify error message xuất hiện: Please enter 6 or more characters without leading or trailing spaces.
 		Assert.assertEquals("Invalid login or password.", error_message);
+		
+	}
+	@Test
+	public void TC05_CreateAnAccount() throws Exception {
+		
+		//Step 02 - Click vào link "My Account" để tới trang đăng nhập
+		driver.findElement(By.xpath(".//div[@class=\"footer\"]//a[@title=\"My Account\"]")).click();
+		
+		//Step 03 - Click CREATE AN ACCOUNT button để tới trang đăng kí tài khoản
+		driver.findElement(By.xpath("//a[@title='Create an Account']")).click();
+		
+		//Step 04 - Nhập thông tin hợp lệ vào tất cả các field: First Name/ Last Name/ Email Address/ Password/ Confirm Password
+		driver.findElement(By.id("firstname")).sendKeys("Tri");
+		driver.findElement(By.id("middlename")).sendKeys("Minh");
+		driver.findElement(By.id("lastname")).sendKeys("Nguyen");
+		driver.findElement(By.id("email_address")).sendKeys(getSaltString() + "@gmail.com");
+		driver.findElement(By.id("password")).sendKeys("trideptrai");
+		driver.findElement(By.id("confirmation")).sendKeys("trideptrai");
+		
+		//Step 05 - Click REGISTER button
+		driver.findElement(By.xpath("//button[@title='Register']")).click();
+		
+		String success_message = driver.findElement(By.xpath("//li[@class='success-msg']")).getText();
+		
+		//Step 06 - Verify error message xuất hiện: Please enter 6 or more characters without leading or trailing spaces.
+		Assert.assertEquals("Thank you for registering with Main Website Store.", success_message);
+		
+		//Step 07 - Logout khỏi hệ thống
+		driver.findElement(By.xpath("//a[contains(@class,'skip-account')]")).click();
+		driver.findElement(By.xpath("//*[@id='header-account']//ul//li[last()]")).click();
+		
+		//Step 08 - Kiểm tra hệ thống navigate về Home page sau khi logout thành công
+		Thread.sleep(7000);
+		Assert.assertEquals(driver.getCurrentUrl(), "http://live.guru99.com/index.php/");
 			
 	}
 
