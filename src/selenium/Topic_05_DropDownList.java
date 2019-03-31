@@ -77,7 +77,19 @@ public class Topic_05_DropDownList {
   }
   
   @Test
-  public void TC_04_kendoDropdown() {
+  public void TC_04_kendoDropdown() throws Exception {
+	  driver.get("https://demos.telerik.com/kendo-ui/dropdownlist/index");
+	  selectDropdownListCustom("//div[@id='cap-view']//label[contains(text(),'Cap Color')]/parent::h4/following-sibling::span[1]","//ul[@id='color_listbox']//li", "Orange");
+	  Assert.assertTrue(isElementDisplayedInDropdown("//div[@id='cap-view']//label[contains(text(),'Cap Color')]/parent::h4/following-sibling::span[1]", "Orange"));
+	  checkColorOfTheCap("Orange");
+	  
+	  selectDropdownListCustom("//div[@id='cap-view']//label[contains(text(),'Cap Color')]/parent::h4/following-sibling::span[1]","//ul[@id='color_listbox']//li", "Grey");
+	  Assert.assertTrue(isElementDisplayedInDropdown("//div[@id='cap-view']//label[contains(text(),'Cap Color')]/parent::h4/following-sibling::span[1]", "Grey"));
+	  checkColorOfTheCap("Grey");
+	  
+	  selectDropdownListCustom("//div[@id='cap-view']//label[contains(text(),'Cap Color')]/parent::h4/following-sibling::span[1]","//ul[@id='color_listbox']//li", "Black");
+	  Assert.assertTrue(isElementDisplayedInDropdown("//div[@id='cap-view']//label[contains(text(),'Cap Color')]/parent::h4/following-sibling::span[1]", "Black"));
+	  checkColorOfTheCap("Black");
 	  
   }
   
@@ -88,6 +100,14 @@ public class Topic_05_DropDownList {
 		  return false;
 	  }
 	  
+  }
+  
+  public boolean checkColorOfTheCap(String expectedValue) {
+	  if(driver.findElement(By.xpath("//div[@id='cap']")).getCssValue("class").contains(expectedValue)) {
+		  return true;
+	  } else {
+		  return false;
+	  }
   }
   
   public void selectDropdownListCustom(String xpathParent, String items, String expectedValue) throws Exception
