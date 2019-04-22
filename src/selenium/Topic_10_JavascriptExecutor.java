@@ -1,5 +1,6 @@
 package selenium;
 
+import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 import org.openqa.selenium.By;
@@ -31,6 +32,33 @@ public class Topic_10_JavascriptExecutor {
 	By emailTextBox = By.xpath("//input[@name='emailid']");
 	By passTextBox = By.xpath("//input[@name='password']");
 	By submitBtn = By.xpath("//input[@name='sub']");
+	
+	//data new user
+	String username = "mngr181358";
+	String password = "berydUp";
+	String customerName = "Selenium Online";
+	String gender = "male";
+	String dob = "10/01/2000";
+	String address = "123 Address";
+	String city = "Ho Chi Minh";
+	String state = "Thu Duc";
+	String pin = "123456";
+	String mobileNumber = "01268887473";
+	String email = "tringuyen" + randomNumber() + "@gmail.com";
+	String pass = "123456";
+	
+	//data new account
+	String firstName = "Tri";
+	String middleName = "Minh";
+	String lastName = "Nguyen";
+	String emailAddress = "tringuyen" + randomNumber() + "@gmail.com";
+	String Confirmpassword = "123456";
+	
+	//Login page elements
+		By usernameTextBox = By.xpath("//input[@name='uid']");
+		By passwordTextBox = By.xpath("//input[@name='password']");
+		By btnLogin = By.xpath("//input[@name='btnLogin']");
+		By newCustomerNav = By.xpath("//ul[@class='menusubnav']//a[text()=\"New Customer\"]");
 	
 	  public void highlightElement(WebElement element) {
 	        JavascriptExecutor js = (JavascriptExecutor) driver;
@@ -67,7 +95,7 @@ public class Topic_10_JavascriptExecutor {
 	            return js.executeScript("window.location = '" + url + "'");
 	    }
 	
-  @Test
+  @Test (enabled = false)
   public void TC_01_JavascriptExecutor() {
 //	  Step 01 - Truy cập vào trang: http://live.guru99.com/
 	  navigateToUrlByJS("http://live.guru99.com/");
@@ -112,17 +140,85 @@ public class Topic_10_JavascriptExecutor {
 	  Assert.assertEquals(executeForBrowser("return document.domain"), "demo.guru99.com");
   }
   
-  @Test
+  @Test (enabled = false)
   public void TC_02_RemoveAttribute() {
 //	      Step 01 - Access vào trang: http://demo.guru99.com/v4
+	  navigateToUrlByJS("http://demo.guru99.com/v4");
 	  
-	  
-//		  Step 02 - Đăng nhập với thông tin: User =  mngr181358 | Pass = berydUp
+//		  Step 02 - Đăng nhập với thông tin: User =  mngr181358 | Pass = berydUp	  
 //		  Note: Manual test để lấy thông tin User/Pass nếu hết hạn - User chỉ tồn tại trong 20 ngày - http://demo.guru99.com/
-//		  Step 03 - Chọn menu New Customer
-//		  Step 04 - Nhập toàn bộ dữ liệu đúng > Click Submit
+	  driver.findElement(usernameTextBox).sendKeys(username);
+	  driver.findElement(passwordTextBox).sendKeys(password);
+	 
+	  //Click login button
+	  driver.findElement(btnLogin).click();
 	  
+	  
+//		  Step 03 - Chọn menu New Customer
+	  clickToElementByJS(driver.findElement(newCustomerNav));
+	  
+//		  Step 04 - Nhập toàn bộ dữ liệu đúng > Click Submit
+	  driver.findElement(customerNameTextBox).sendKeys(customerName);
+	  driver.findElement(genderRadioBox).click();
+	  removeAttributeInDOM(driver.findElement(dobTextBox), "type");
+	  driver.findElement(dobTextBox).sendKeys(dob);
+	  driver.findElement(addressTextArea).sendKeys(address);
+	  driver.findElement(cityTextBox).sendKeys(city);
+	  driver.findElement(stateTextBox).sendKeys(state);
+	  driver.findElement(pinTextBox).sendKeys(pin);
+	  driver.findElement(phoneTextBox).sendKeys(mobileNumber);
+	  driver.findElement(emailTextBox).sendKeys(email);
+	  driver.findElement(passTextBox).sendKeys(password);
+	  driver.findElement(submitBtn).click();
+	  
+	  //Step 05 - Verify tạo mới Customer thành công
+	  Assert.assertEquals(customerName,driver.findElement(By.xpath("//table[@id='customer']//td[text() = 'Customer Name']/following-sibling::td")).getText());
+	  Assert.assertEquals(gender ,driver.findElement(By.xpath("//table[@id='customer']//td[text() = 'Gender']/following-sibling::td")).getText());
+	  Assert.assertEquals(convertDate(dob),driver.findElement(By.xpath("//table[@id='customer']//td[text() = 'Birthdate']/following-sibling::td")).getText());
+	  Assert.assertEquals(address,driver.findElement(By.xpath("//table[@id='customer']//td[text() = 'Address']/following-sibling::td")).getText());
+	  Assert.assertEquals(city,driver.findElement(By.xpath("//table[@id='customer']//td[text() = 'City']/following-sibling::td")).getText());
+	  Assert.assertEquals(state,driver.findElement(By.xpath("//table[@id='customer']//td[text() = 'State']/following-sibling::td")).getText());
+	  Assert.assertEquals(pin,driver.findElement(By.xpath("//table[@id='customer']//td[text() = 'Pin']/following-sibling::td")).getText());
+	  Assert.assertEquals(mobileNumber,driver.findElement(By.xpath("//table[@id='customer']//td[text() = 'Mobile No.']/following-sibling::td")).getText());
+	  Assert.assertEquals(email,driver.findElement(By.xpath("//table[@id='customer']//td[text() = 'Email']/following-sibling::td")).getText());
+	    
   }
+  
+  @Test
+  public void TC_03_CreateAnAccount() {
+//	 	  Step 01 - Truy cập vào trang: http://live.guru99.com/
+	  navigateToUrlByJS("http://live.guru99.com/");
+	  
+//		  Step 02 - Click vào link "My Account" để tới trang đăng nhập (Sử dụng JE)
+	  WebElement myAccount = driver.findElement(By.xpath("//li[@class='first']/a[text() = 'My Account']"));
+	  clickToElementByJS(myAccount);
+	  
+//		  Step 03 - Click CREATE AN ACCOUNT button để tới trang đăng kí tài khoản (Sử dụng JE)
+	  WebElement createAccount = driver.findElement(By.xpath("//a[@title='Create an Account']"));
+	  clickToElementByJS(createAccount);
+	  
+//		  Step 04 - Nhập thông tin hợp lệ vào tất cả các field: First Name/ Last Name/ Email Address/ Password/ Confirm Password (Sử dụng JE)
+//		  (Lưu ý: Tạo random cho dữ liệu tại field Email Address)
+	  sendkeyToElementByJS(driver.findElement(By.id("firstname")), firstName);
+	  sendkeyToElementByJS(driver.findElement(By.id("middlename")), middleName);
+	  sendkeyToElementByJS(driver.findElement(By.id("lastname")), lastName);
+	  sendkeyToElementByJS(driver.findElement(By.id("email_address")), emailAddress);
+	  sendkeyToElementByJS(driver.findElement(By.id("password")), Confirmpassword);
+	  sendkeyToElementByJS(driver.findElement(By.id("confirmation")), Confirmpassword);
+	  
+//		  Step 05 - Click REGISTER button (Sử dụng JE)
+	  clickToElementByJS(driver.findElement(By.xpath("//div[@class='buttons-set']//span[text() = 'Register']")));
+	  
+//		  Step 05 - Verify message xuất hiện khi đăng kí thành công: Thank you for registering with Main Website Store. (Sử dụng JE)
+	  String verify = executeForBrowser("return document.documentElement.innerText").toString();
+	  Assert.assertTrue(verify.contains("Thank you for registering with Main Website Store."));
+	  
+//		  Step 06 - Logout khỏi hệ thống (Sử dụng JE)
+	  clickToElementByJS(driver.findElement(By.xpath("//li[@class=' last']//a[@title='Log Out']")));
+//		  Step 07 - Kiểm tra hệ thống navigate về Home page sau khi logout thành công (Sử dụng JE)
+	  Assert.assertTrue(driver.findElement(By.xpath("//div[@class='page-title']//h2[contains(text(),'This is demo site for')]")).isDisplayed());
+  }
+  
   @BeforeTest
   public void beforeTest() {
 	  System.setProperty("webdriver.chrome.driver","D:\\Automation Test\\chromedriver\\chromedriver.exe");
@@ -135,5 +231,20 @@ public class Topic_10_JavascriptExecutor {
   public void afterTest() {
 	  driver.quit();
   }
-
+  
+  private int randomNumber() {
+		Random ran = new Random();
+		int n = ran.nextInt(9999);
+		return n;
+	}
+  
+  public String convertDate(String date) {
+	  String day, month, year;
+	  String [] a = date.split("/");	
+	  day = a[0];
+	  month = a[1];
+	  year = a[2];
+	  String newdate = year + "-" + day + "-" + month;
+	  return newdate;
+  }
 }
