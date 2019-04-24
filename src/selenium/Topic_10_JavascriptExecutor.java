@@ -60,7 +60,7 @@ public class Topic_10_JavascriptExecutor {
 		By btnLogin = By.xpath("//input[@name='btnLogin']");
 		By newCustomerNav = By.xpath("//ul[@class='menusubnav']//a[text()=\"New Customer\"]");
 	
-	  public void highlightElement(WebElement element) {
+		public void highlightElement(WebElement element) {
 	        JavascriptExecutor js = (JavascriptExecutor) driver;
 	        js.executeScript("arguments[0].style.border='6px groove red'", element);
 	    }
