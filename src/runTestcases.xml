@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<suite name="Selenium WebDriver API" parallel="tests" thread-counts="3">
+
+
+	<test name="Run test on Chrome browser">
+		<parameter name="browser" value="chrome" />
+		<parameter name="username" value="auto_test_05@gmail.com" />
+		<parameter name="password" value="123123" />
+		<classes>
+			<class name="testng.TestNG_05_ParallelTesting" />
+		</classes>
+	</test> <!-- Test -->
+
+	<test name="Run test on Firefox browser">
+		<parameter name="browser" value="firefox" />
+		<parameter name="username" value="auto_test_06@gmail.com" />
+		<parameter name="password" value="123123" />
+		<classes>
+			<class name="testng.TestNG_05_ParallelTesting" />
+		</classes>
+	</test> <!-- Test -->
+
+	<test name="Run test on Chrome Headless browser">
+		<parameter name="username" value="auto_test_07@gmail.com" />
+		<parameter name="password" value="123123" />
+		<parameter name="browser" value="headless" />
+		<classes>
+			<class name="testng.TestNG_05_ParallelTesting" />
+		</classes>
+	</test> <!-- Test -->
+</suite> <!-- Suite -->
